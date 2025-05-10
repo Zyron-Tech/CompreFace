@@ -1,0 +1,57 @@
+version: "3.7"
+
+services:
+  compreface-admin:
+    image: exadel/compreface-admin:latest
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=compreface
+      - DB_USERNAME=compreface
+      - DB_PASSWORD=compreface
+    ports:
+      - "8001:8000"
+
+  compreface-api:
+    image: exadel/compreface-api:latest
+    depends_on:
+      - compreface-admin
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - ADMIN_HOST=compreface-admin
+    ports:
+      - "8000:8000"
+
+  compreface-ui:
+    image: exadel/compreface-ui:latest
+    depends_on:
+      - compreface-api
+    environment:
+      - API_HOST=compreface-api
+    ports:
+      - "3000:80"
+
+  compreface-core:
+    image: exadel/compreface-core:latest
+    depends_on:
+      - compreface-api
+
+  compreface-fe:
+    image: exadel/compreface-fe:latest
+    depends_on:
+      - compreface-core
+
+  postgres:
+    image: postgres:12
+    environment:
+      - POSTGRES_DB=compreface
+      - POSTGRES_USER=compreface
+      - POSTGRES_PASSWORD=compreface
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
