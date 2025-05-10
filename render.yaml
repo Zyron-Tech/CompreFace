@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: compreface
-    env: docker
-    repo: https://github.com/Zyron-Tech/CompreFace
-    dockerContext: .
-    dockerfilePath: docker/docker-compose.yml
-    autoDeploy: true
-    plan: free
